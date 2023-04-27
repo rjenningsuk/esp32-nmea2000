@@ -3,7 +3,7 @@
         "name": "apiPostEnabled",
         "label": "Enable API Post",
         "type": "boolean",
-        "default": "true",
+        "default": "false",
         "description": "Turn on posting of data to external api",
         "category": "API Post",
         "capabilities": {
