@@ -4,14 +4,12 @@
 
     #include "GwApiPostTask.h"
     #include "GwApi.h"
-    #include "GwCounter.h"
+    #include "GWWifi.h"
     #include <vector>
     #include "ArduinoJson.h"
     #include "HTTPClient.h"
-    #include "WiFi.h"
     #include "WiFiClient.h"
     #include "WiFiClientSecure.h"
-
 
     /**
      * an init function that ist being called before other initializations from the core
@@ -51,35 +49,34 @@
         String apiToken = api->getConfig()->getConfigItem(api->getConfig()->apiToken, "")->asString();
 
         if(strlen(wifiSSID) == 0 || strlen(wifiPass) == 0) {
-            logger->logString("Missing wifi details. End Task");
+            logger->logString("ApiPostTask: Missing wifi details. End Task");
             vTaskDelete(NULL);
             return;
         }
 
         if (!apiPostEnabled) {
-            logger->logString("API Disabled. End Task");
+            logger->logString("ApiPostTask: API Disabled. End Task");
             vTaskDelete(NULL);
             return;
         }
 
         if(!apiTargetUrl.length() || !apiToken.length()) {
-            logger->logString("Missing API data required. End Task");
+            logger->logString("ApiPostTask: Missing API data required. End Task");
             vTaskDelete(NULL);
             return;
         }
 
-        logger->logString("Starting API Post");
 
-        //There must be a way to use the current wifi connection in main.cpp but not sure so this will do for now
-        //as that could just be for access point stuffs.
-        WiFi.begin(wifiSSID, wifiPass);
-        String connecting = "Connecting WIFI... SSID: " + String(wifiSSID) + " PASS: " + String(wifiPass);
-        logger->logString(connecting.c_str());
-        while (WiFi.status() != WL_CONNECTED) {
-            logger->logString("Connecting...");
-            delay(500);
+        logger->logString("ApiPostTask: Waiting 30s to allow for initialisation.");
+        delay(30000);
+
+        if(!WiFi.isConnected()) {
+            logger->logString("ApiPostTask: WiFi not connected after 30s. Check details are correct. End Task");
+            vTaskDelete(NULL);
+            return;
         }
-        logger->logString("Connected to WiFi");
+
+        logger->logString("ApiPostTask: Starting task...");
 
         GwApi::BoatValue *lat = new GwApi::BoatValue(GwBoatData::_LAT);
         GwApi::BoatValue *lon = new GwApi::BoatValue(GwBoatData::_LON);
@@ -99,22 +96,16 @@
         GwApi::BoatValue *dbt = new GwApi::BoatValue(GwBoatData::_DBT);
         GwApi::BoatValue *wTemp = new GwApi::BoatValue(GwBoatData::_WTemp);
         GwApi::BoatValue *valueList[] = {lat, lon, cog, alt, aws, awa, maxAws, tws, twd, maxTws, sog, stw, hdg, mhdg, dbs, dbt, wTemp};
-        GwApi::Status status;
 
         HTTPClient httpClient;
         WiFiClientSecure clientSecure;
         clientSecure.setInsecure();  //disable ssl verification. See if we can automate getting the root ca cert somehow?
 
-        api->getStatus(status);
-
-        logger->logString("Waiting 30s to allow network to populate data");
-        delay(30000);
-
         while (true) {
-            logger->logString("Get Boat Data From Internal Api");
+            logger->logString("ApiPostTask: Get Boat Data From Internal Api");
             api->getBoatDataValues(17, valueList);
 
-            logger->logString("Populate json data object and convert to string");
+            logger->logString("ApiPostTask: Populate json data object and convert to string");
             DynamicJsonDocument doc(4096);
             doc["apiToken"] = apiToken;
             doc["lat"] = lat->value;
@@ -137,25 +128,20 @@
             String json;
             serializeJson(doc, json);
 
-            String postMessage = "Posting data to: " + String(apiTargetUrl);
+            String postMessage = "ApiPostTask: Posting data to: " + String(apiTargetUrl);
             logger->logString(postMessage.c_str());
             logger->logString(json.c_str());
             httpClient.begin(clientSecure, apiTargetUrl);
             httpClient.addHeader("Content-Type", "application/json");
             httpClient.POST(json);
-            logger->logString("Response:");
+            logger->logString("ApiPostTask: Response:");
             logger->logString(httpClient.getString().c_str());
             httpClient.end();
-
-            //Need to work out how to get this onto count page. main.cpp uses counters and looks like it overrides getStatus() function.
-            //However we don't have access to the api in there to be able to grab this value.
-            status.apiTx++;
-            api->getStatus(status);
 
             delay(10000);
         }
 
-        logger->logString("End Task");
+        logger->logString("ApiPostTask: End Task");
         vTaskDelete(NULL);
     }
 
