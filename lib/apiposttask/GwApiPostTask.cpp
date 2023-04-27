@@ -83,6 +83,7 @@
 
         GwApi::BoatValue *lat = new GwApi::BoatValue(GwBoatData::_LAT);
         GwApi::BoatValue *lon = new GwApi::BoatValue(GwBoatData::_LON);
+        GwApi::BoatValue *cog = new GwApi::BoatValue(GwBoatData::_COG);
         GwApi::BoatValue *alt = new GwApi::BoatValue(GwBoatData::_ALT);
         GwApi::BoatValue *aws = new GwApi::BoatValue(GwBoatData::_AWS);
         GwApi::BoatValue *awa = new GwApi::BoatValue(GwBoatData::_AWA);
@@ -97,7 +98,7 @@
         GwApi::BoatValue *dbs = new GwApi::BoatValue(GwBoatData::_DBS);
         GwApi::BoatValue *dbt = new GwApi::BoatValue(GwBoatData::_DBT);
         GwApi::BoatValue *wTemp = new GwApi::BoatValue(GwBoatData::_WTemp);
-        GwApi::BoatValue *valueList[] = {lat, lon, alt, aws, awa, maxAws, tws, twd, maxTws, sog, stw, hdg, mhdg, dbs, dbt, wTemp};
+        GwApi::BoatValue *valueList[] = {lat, lon, cog, alt, aws, awa, maxAws, tws, twd, maxTws, sog, stw, hdg, mhdg, dbs, dbt, wTemp};
         GwApi::Status status;
 
         HTTPClient httpClient;
@@ -106,15 +107,19 @@
 
         api->getStatus(status);
 
+        logger->logString("Waiting 30s to allow network to populate data");
+        delay(30000);
+
         while (true) {
             logger->logString("Get Boat Data From Internal Api");
-            api->getBoatDataValues(5, valueList);
+            api->getBoatDataValues(17, valueList);
 
             logger->logString("Populate json data object and convert to string");
-            DynamicJsonDocument doc(1024);
+            DynamicJsonDocument doc(4096);
             doc["apiToken"] = apiToken;
             doc["lat"] = lat->value;
             doc["lon"] = lon->value;
+            doc["cog"] = cog->value;
             doc["alt"] = alt->value;
             doc["aws"] = aws->value;
             doc["awa"] = awa->value;
