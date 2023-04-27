@@ -3,7 +3,6 @@ let lastUpdate = (new Date()).getTime();
 let reloadConfig = false;
 let needAdminPass=true;
 let lastSalt="";
-let apiCapabiltiies=[];
 function addEl(type, clazz, parent, text) {
     let el = document.createElement(type);
     if (clazz) {
@@ -290,6 +289,7 @@ function createCounterDisplay(parent,label,key,isEven){
     let clazz="row icon-row counter-row";
     if (isEven) clazz+=" even";
     let row=addEl('div',clazz,parent);
+    row.setAttribute('id', 'counter-'+key);
     let icon=addEl('span','icon icon-more',row);
     addEl('span','label',row,label);
     let value=addEl('span','value',row,'---');
@@ -345,12 +345,6 @@ let counters={
     countSERout: 'Serial out'
 }
 
-//Disable counters if api_post_only
-if(apiCapabiltiies.api_post_only) {
-    counters={
-        count2Kin: 'NMEA2000 in'
-    }
-}
 function showOverlay(text, isHtml) {
     let el = document.getElementById('overlayContent');
     if (isHtml) {
@@ -1098,13 +1092,22 @@ function createConfigDefinitions(parent, capabilities, defs,includeXdr) {
 function loadConfigDefinitions() {
     getJson("api/capabilities")
         .then(function (capabilities) {
-            apiCapabiltiies = capabilities;
             if (capabilities.HELP_URL){
                 let el=document.getElementById('helpButton');
                 if (el) el.setAttribute('data-url',capabilities.HELP_URL);
             }
             if(capabilities.api_post_only) {
-                console.log("api post only. hide extra info")
+                console.log("api post only. disable counters & hide ui elements");
+
+                //Hide counters
+                let countersToHide = ['count2Kout', 'countTCPin', 'countTCPout', 'countTCPClientin', 'countTCPClientout', 'countUSBin', 'countUSBout', 'countSERin', 'countSERout'];
+                for(let key in countersToHide) {
+                    let counterName = countersToHide[key];
+                    let counterElement = document.getElementById('counter-'+counterName);
+                    counterElement.style.display = "none";
+                }
+
+                //Hide other UI elements
                 var divsToHide = document.getElementsByClassName("hide-for-api-post-only");
                 for(var i = 0; i < divsToHide.length; i++){
                     divsToHide[i].style.display = "none";
