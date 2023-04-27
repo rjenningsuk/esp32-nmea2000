@@ -1,0 +1,35 @@
+[
+    {
+        "name": "apiPostEnabled",
+        "label": "Enable API Post",
+        "type": "boolean",
+        "default": "true",
+        "description": "Turn on posting of data to external api",
+        "category": "API Post",
+        "capabilities": {
+            "api_post":"true"
+        }
+    },
+    {
+        "name": "apiTargetUrl",
+        "label": "API URL",
+        "type": "string",
+        "default": "",
+        "description": "URL to post json data at",
+        "category": "API Post",
+        "capabilities": {
+            "api_post":"true"
+        }
+    },
+    {
+        "name": "apiToken",
+        "label": "API Token",
+        "type": "string",
+        "default": "",
+        "description": "Posted as part of the json data with key apiToken",
+        "category": "API Post",
+        "capabilities": {
+            "api_post": "true"
+        }
+    }
+]

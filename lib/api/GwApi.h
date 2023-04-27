@@ -55,6 +55,7 @@ class GwApi{
                 bool tcpClientConnected=false;
                 unsigned long n2kRx=0;
                 unsigned long n2kTx=0;
+                unsigned long apiTx = 0;
                 void empty(){
                     wifiApOn=false;
                     wifiClientOn=false;
@@ -75,7 +76,7 @@ class GwApi{
                     tcpClTx=0;
                     tcpClientConnected=false;
                     n2kRx=0;
-                    n2kTx=0; 
+                    n2kTx=0;
                 }
         }; 
         /**

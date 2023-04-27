@@ -3,6 +3,7 @@ let lastUpdate = (new Date()).getTime();
 let reloadConfig = false;
 let needAdminPass=true;
 let lastSalt="";
+let apiCapabiltiies=[];
 function addEl(type, clazz, parent, text) {
     let el = document.createElement(type);
     if (clazz) {
@@ -342,6 +343,13 @@ let counters={
     countUSBout: 'USB out',
     countSERin: 'Serial in',
     countSERout: 'Serial out'
+}
+
+//Disable counters if api_post_only
+if(apiCapabiltiies.api_post_only) {
+    counters={
+        count2Kin: 'NMEA2000 in'
+    }
 }
 function showOverlay(text, isHtml) {
     let el = document.getElementById('overlayContent');
@@ -1090,9 +1098,17 @@ function createConfigDefinitions(parent, capabilities, defs,includeXdr) {
 function loadConfigDefinitions() {
     getJson("api/capabilities")
         .then(function (capabilities) {
+            apiCapabiltiies = capabilities;
             if (capabilities.HELP_URL){
                 let el=document.getElementById('helpButton');
                 if (el) el.setAttribute('data-url',capabilities.HELP_URL);
+            }
+            if(capabilities.api_post_only) {
+                console.log("api post only. hide extra info")
+                var divsToHide = document.getElementsByClassName("hide-for-api-post-only");
+                for(var i = 0; i < divsToHide.length; i++){
+                    divsToHide[i].style.display = "none";
+                }
             }
             getJson("config.json")
                 .then(function (defs) {

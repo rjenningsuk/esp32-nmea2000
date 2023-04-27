@@ -18,9 +18,9 @@
 <div id="tabs">
   <div class="tab active" data-page="statusPage">Status</div>
   <div class="tab" data-page="configPage">Config</div>
-  <div class="tab" data-page="xdrPage">XDR</div>
+  <div class="tab hide-for-api-post-only" data-page="xdrPage">XDR</div>
   <div class="tab" data-page="dashboardPage">Data</div>
-  <div class="tab" data-page="updatePage">Update</div>
+  <div class="tab hide-for-api-post-only" data-page="updatePage">Update</div>
   <div class="tab" data-url="https://github.com/wellenvogel/esp32-nmea2000" data-window="help" id="helpButton">Help</div>
 </div>
 <div id="statusPage" class="tabPage">
@@ -43,15 +43,15 @@
       <span class="label">wifi client IP</span>
       <span class="value" id="clientIP">---</span>
     </div>
-    <div class="row">
+    <div class="row hide-for-api-post-only">
       <span class="label"># clients</span>
       <span class="value" id="numClients">---</span>
-    </div> 
-    <div class="row">
+    </div>
+    <div class="row hide-for-api-post-only">
       <span class="label">TCP client connected</span>
       <span class="value" id="clientCon">---</span>
     </div>
-    <div class="row">
+    <div class="row hide-for-api-post-only">
       <span class="label">TCP client error</span>
       <span class="value" id="clientErr">---</span>
     </div> 
@@ -64,18 +64,18 @@
 </div>
 <div class="configForm tabPage hidden" id="configPage" >
   <div class="buttons">
-    <button id="resetForm">ReloadConfig</button>
-    <button id="forgetPass">ForgetPass</button>
+    <button id="resetForm" class="hide-for-api-post-only">ReloadConfig</button>
+    <button id="forgetPass" class="hide-for-api-post-only">ForgetPass</button>
     <button id="changeConfig">Save&Restart</button>
-    <button id="exportConfig">Export</button>
-    <button id="importConfig">Import</button>
-    <button id="factoryReset">FactoryReset</button>
+    <button id="exportConfig" class="hide-for-api-post-only">Export</button>
+    <button id="importConfig" class="hide-for-api-post-only">Import</button>
+    <button id="factoryReset" class="hide-for-api-post-only">FactoryReset</button>
   </div>
   <div class="configFormRows">
 
   </div>
 </div>
-<div class="configForm tabPage hidden" id="xdrPage" >
+<div class="configForm tabPage hidden hide-for-api-post-only" id="xdrPage" >
   <div class="buttons">
     <button id="resetForm">ReloadConfig</button>
     <button id="changeConfig">Save&Restart</button>
@@ -90,7 +90,7 @@
 <div class="tabPage hidden" id="dashboardPage">
 
 </div>
-<div class="tabPage hidden" id="updatePage">
+<div class="tabPage hidden hide-for-api-post-only" id="updatePage">
   <div class="row">
     <span class="label">firmware type</span>
     <span class="value status-fwtype">---</span>
