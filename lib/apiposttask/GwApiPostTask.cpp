@@ -54,7 +54,7 @@
         GwLog *logger=api->getLogger();
         const char *wifiSSID = api->getConfig()->getConfigItem(api->getConfig()->wifiSSID, "")->asCString();
         const char *wifiPass = api->getConfig()->getConfigItem(api->getConfig()->wifiPass, "")->asCString();
-        bool apiPostEnabled = api->getConfig()->getConfigItem(api->getConfig()->apiPostEnabled, false)->asBoolean();
+        bool apiPostEnabled = api->getConfig()->getConfigItem(api->getConfig()->apiPostEnabled, "false")->asBoolean();
         String apiTargetUrl = api->getConfig()->getConfigItem(api->getConfig()->apiTargetUrl, "")->asString();
         String apiToken = api->getConfig()->getConfigItem(api->getConfig()->apiToken, "")->asString();
 
