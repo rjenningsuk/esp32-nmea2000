@@ -14,15 +14,19 @@
     /**
      * an init function that ist being called before other initializations from the core
      */
-    void apiPostInit(GwApi *api){
-        
+    void apiPostInit(GwApi *api)
+    {        
+        //Default certain config values
         if(GWAPIPOST_SYSTEM_NAME.length()) {
             api->getConfig()->setValue(api->getConfig()->systemName, GWAPIPOST_SYSTEM_NAME);
         }
         if(GWAPIPOST_AP_PASSWORD.length()) {
             api->getConfig()->setValue(api->getConfig()->apPassword, GWAPIPOST_AP_PASSWORD);
         }
-
+        if(GWAPIPOST_ADMIN_PASSWORD.length()) {
+            api->getConfig()->setValue(api->getConfig()->adminPassword, GWAPIPOST_ADMIN_PASSWORD);
+        }
+        
         #ifdef API_POST_ONLY
             api->getConfig()->setValue(api->getConfig()->wifiClient, "true");
             api->getConfig()->setValue(api->getConfig()->sendN2k, "false");
@@ -37,10 +41,16 @@
             api->getConfig()->setValue(api->getConfig()->sendTCP, "false");
             api->getConfig()->setValue(api->getConfig()->readTCP, "false");
             api->getConfig()->setValue(api->getConfig()->tcpToN2k, "false");
+
+            api->getConfig()->setValue(api->getConfig()->apiPostEnabled, "true");
+            if(GWAPIPOST_API_URL.length()) {
+                api->getConfig()->setValue(api->getConfig()->apiTargetUrl, GWAPIPOST_API_URL);
+            }
         #endif
     }
 
-    void apiPostTask(GwApi *api){
+    void apiPostTask(GwApi *api)
+    {
         GwLog *logger=api->getLogger();
         const char *wifiSSID = api->getConfig()->getConfigItem(api->getConfig()->wifiSSID, "")->asCString();
         const char *wifiPass = api->getConfig()->getConfigItem(api->getConfig()->wifiPass, "")->asCString();
