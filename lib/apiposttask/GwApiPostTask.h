@@ -23,6 +23,9 @@
         DECLARE_CAPABILITY(HIDEuseAdminPass, true);
         DECLARE_CAPABILITY(HIDEadminPassword, true);
 
+        DECLARE_CAPABILITY(HIDEapiPostEnabled, true);
+        DECLARE_CAPABILITY(HIDEapiTargetUrl, true);
+
         DECLARE_CAPABILITY(HIDEshowInvalidData, true);
         DECLARE_CAPABILITY(HIDElogLevel, true);
         DECLARE_CAPABILITY(HIDEminXdrInterval, true);
