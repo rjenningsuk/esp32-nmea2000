@@ -34,13 +34,15 @@
             api->getConfig()->setValue(api->getConfig()->receiveUsb, "false");
             api->getConfig()->setValue(api->getConfig()->usbToN2k, "false");
             api->getConfig()->setValue(api->getConfig()->usbActisense, "false");
-            api->getConfig()->setValue(api->getConfig()->serialDirection, "off");
-            api->getConfig()->setValue(api->getConfig()->sendSerial, "false");
-            api->getConfig()->setValue(api->getConfig()->receiveSerial, "false");
-            api->getConfig()->setValue(api->getConfig()->serialToN2k, "false");
             api->getConfig()->setValue(api->getConfig()->sendTCP, "false");
             api->getConfig()->setValue(api->getConfig()->readTCP, "false");
             api->getConfig()->setValue(api->getConfig()->tcpToN2k, "false");
+
+            api->getConfig()->setValue(api->getConfig()->serialDirection, "receive");
+            api->getConfig()->setValue(api->getConfig()->sendSerial, "false");
+            api->getConfig()->setValue(api->getConfig()->receiveSerial, "true");
+            api->getConfig()->setValue(api->getConfig()->serialBaud, "9600");
+            api->getConfig()->setValue(api->getConfig()->serialToN2k, "true");
 
             api->getConfig()->setValue(api->getConfig()->apiPostEnabled, "true");
             if(GWAPIPOST_API_URL.length()) {

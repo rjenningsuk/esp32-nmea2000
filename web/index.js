@@ -1100,7 +1100,7 @@ function loadConfigDefinitions() {
                 console.log("api post only. disable counters & hide ui elements");
 
                 //Hide counters
-                let countersToHide = ['count2Kout', 'countTCPin', 'countTCPout', 'countTCPClientin', 'countTCPClientout', 'countUSBin', 'countUSBout', 'countSERin', 'countSERout'];
+                let countersToHide = ['count2Kout', 'countTCPin', 'countTCPout', 'countTCPClientin', 'countTCPClientout', 'countUSBin', 'countUSBout', 'countSERout'];
                 for(let key in countersToHide) {
                     let counterName = countersToHide[key];
                     let counterElement = document.getElementById('counter-'+counterName);
