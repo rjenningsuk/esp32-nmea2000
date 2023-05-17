@@ -78,15 +78,8 @@
             return;
         }
 
-
         logger->logString("ApiPostTask: Waiting 30s to allow for initialisation.");
         delay(30000);
-
-        if(!WiFi.isConnected()) {
-            logger->logString("ApiPostTask: WiFi not connected after 30s. Check details are correct. End Task");
-            vTaskDelete(NULL);
-            return;
-        }
 
         logger->logString("ApiPostTask: Starting task...");
 
@@ -114,6 +107,13 @@
         clientSecure.setInsecure();  //disable ssl verification. See if we can automate getting the root ca cert somehow?
 
         while (true) {
+
+            if (!WiFi.isConnected()) {
+                logger->logString("ApiPostTask: WiFi not connected in processing loop. Pause 10s");
+                delay(10000 );
+                continue;
+            }
+
             logger->logString("ApiPostTask: Get Boat Data From Internal Api");
             api->getBoatDataValues(17, valueList);
 
