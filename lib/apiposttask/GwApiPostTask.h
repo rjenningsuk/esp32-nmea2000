@@ -16,12 +16,12 @@
         DECLARE_CAPABILITY(api_post_only, true);
         DECLARE_STRING_CAPABILITY(HELP_URL,GWAPIPOST_HELP_URL);
 
-        DECLARE_CAPABILITY(HIDEsystemName, true);
+        // DECLARE_CAPABILITY(HIDEsystemName, true);
         DECLARE_CAPABILITY(HIDEtalkerId, true);
         DECLARE_CAPABILITY(HIDEstopApTime, true);
-        DECLARE_CAPABILITY(HIDEapPassword, true);
+        // DECLARE_CAPABILITY(HIDEapPassword, true);
         DECLARE_CAPABILITY(HIDEuseAdminPass, true);
-        DECLARE_CAPABILITY(HIDEadminPassword, true);
+        // DECLARE_CAPABILITY(HIDEadminPassword, true);
 
         DECLARE_CAPABILITY(HIDEapiPostEnabled, true);
         DECLARE_CAPABILITY(HIDEapiTargetUrl, true);
